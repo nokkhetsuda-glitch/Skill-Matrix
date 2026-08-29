@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Skill Matrix สายการผลิต</title>
+<title>Skill Matrix – Production Line</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800&family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
@@ -222,30 +222,58 @@
 
   /* ---------- Header ---------- */
   .masthead{
+    position:relative;
+    overflow:hidden;
     display:flex;
     justify-content:space-between;
     align-items:flex-end;
-    gap:24px;
+    gap:28px;
     flex-wrap:wrap;
-    border-bottom:2px solid var(--border-strong);
-    padding-bottom:18px;
+    background:linear-gradient(135deg, #202C6B 0%, #4F46E5 55%, #7C3AED 100%);
+    border-radius:var(--radius-lg);
+    padding:34px 32px 30px;
+    box-shadow:0 24px 48px -20px rgba(76,29,149,.5), var(--shadow);
   }
+  .masthead::before{
+    content:"";
+    position:absolute; top:-70px; right:-50px;
+    width:280px; height:280px; border-radius:50%;
+    background:radial-gradient(circle, rgba(103,232,249,.35), transparent 70%);
+    pointer-events:none;
+  }
+  .masthead::after{
+    content:"";
+    position:absolute; bottom:-90px; left:28%;
+    width:240px; height:240px; border-radius:50%;
+    background:radial-gradient(circle, rgba(255,255,255,.12), transparent 70%);
+    pointer-events:none;
+  }
+  .masthead > *{ position:relative; z-index:1; }
+
   .eyebrow{
     display:inline-flex;
     align-items:center;
     gap:8px;
     font-family:var(--font-mono);
-    font-size:11.5px;
-    letter-spacing:.12em;
+    font-size:11px;
+    letter-spacing:.14em;
     text-transform:uppercase;
-    color:var(--accent);
-    background:var(--accent-soft);
-    border:1px solid var(--accent);
+    color:#fff;
+    background:rgba(255,255,255,.14);
+    border:1px solid rgba(255,255,255,.32);
     border-radius:999px;
-    padding:3px 10px 3px 8px;
-    margin-bottom:10px;
+    padding:4px 12px 4px 9px;
+    margin-bottom:14px;
   }
-  .eyebrow .dot{ width:6px; height:6px; border-radius:50%; background:var(--accent); }
+  .eyebrow .dot{
+    width:6px; height:6px; border-radius:50%; background:#67E8F9;
+    animation:pulse-dot 2.2s ease-in-out infinite;
+  }
+  @keyframes pulse-dot{ 0%,100%{ opacity:1; transform:scale(1); } 50%{ opacity:.5; transform:scale(1.35); } }
+
+  .masthead-title-row{ display:flex; align-items:center; gap:14px; }
+  .masthead-icon{ font-size:32px; line-height:1; filter:drop-shadow(0 4px 10px rgba(0,0,0,.3)); }
+
   h1{
     font-family:var(--font-display);
     font-weight:800;
@@ -255,21 +283,33 @@
     margin:0 0 8px;
     text-wrap:balance;
   }
+  .masthead h1{ color:#fff; }
   .masthead p{
     margin:0;
     max-width:58ch;
-    color:var(--ink-dim);
+    color:rgba(255,255,255,.82);
     font-size:14.5px;
   }
   .masthead-meta{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+    background:rgba(255,255,255,.12);
+    border:1px solid rgba(255,255,255,.25);
+    border-radius:var(--radius-md);
+    padding:12px 18px;
     font-family:var(--font-mono);
     font-size:12px;
-    color:var(--ink-faint);
-    text-align:right;
-    line-height:1.7;
+    color:rgba(255,255,255,.8);
     white-space:nowrap;
   }
-  .masthead-meta b{ color:var(--ink-dim); font-weight:600; }
+  .masthead-meta .row{ display:flex; align-items:center; gap:8px; }
+  .masthead-meta svg{ flex:none; opacity:.85; }
+  .masthead-meta b{ color:#fff; font-weight:600; }
+
+  @media (prefers-reduced-motion:reduce){
+    .eyebrow .dot{ animation:none; }
+  }
 
   /* ---------- Stat cards ---------- */
   .stats{
@@ -656,7 +696,7 @@
       <span class="brand-mark">🏭</span>
       <div>
         <div class="brand-name">Skill Matrix</div>
-        <div class="brand-sub">สายการผลิต</div>
+        <div class="brand-sub">Production Line</div>
       </div>
     </div>
 
@@ -674,13 +714,22 @@
 
   <header class="masthead">
     <div>
-      <span class="eyebrow"><span class="dot"></span>ต้นแบบ · ข้อมูลตัวอย่าง</span>
-      <h1>Skill Matrix สายการผลิต</h1>
+      <span class="eyebrow"><span class="dot"></span>ระบบต้นแบบ · ข้อมูลตัวอย่าง</span>
+      <div class="masthead-title-row">
+        <span class="masthead-icon">🏭</span>
+        <h1>Skill Matrix &ndash; Production Line</h1>
+      </div>
       <p>ดูระดับทักษะพนักงานรายสถานีงานของทั้ง 3 หน่วยงานในที่เดียว กรองดูทีละหน่วยงานจากเมนูซ้ายมือ คลิกชื่อพนักงานเพื่อดูภาพรวมทักษะ หรือคลิกหัวคอลัมน์สถานีงานเพื่อดูว่าใครพร้อมหมุนเวียนเข้าไปช่วยได้ — รวมถึงคนจากหน่วยงานอื่น</p>
     </div>
     <div class="masthead-meta">
-      <div>อัปเดตล่าสุด&nbsp; <b>28 ส.ค. 2569</b></div>
-      <div>ฝ่ายผลิต &middot; กะเช้า</div>
+      <div class="row">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        <span>อัปเดตล่าสุด <b>28 ส.ค. 2569</b></span>
+      </div>
+      <div class="row">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15.5 14"/></svg>
+        <span>ฝ่ายผลิต &middot; กะเช้า</span>
+      </div>
     </div>
   </header>
 
