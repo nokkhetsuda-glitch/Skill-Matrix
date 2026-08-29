@@ -170,9 +170,34 @@
     border-top:1px solid rgba(255,255,255,.08); padding:14px 8px 2px;
   }
 
+  .mobile-topbar{ display:none; }
+  .sidebar-backdrop{ display:none; }
+
   @media (max-width:760px){
-    .app{ flex-direction:column; }
-    .sidebar{ width:100%; height:auto; position:relative; }
+    .mobile-topbar{
+      display:flex; align-items:center; gap:10px;
+      background:var(--surface); border-bottom:1px solid var(--border);
+      padding:12px 16px; position:sticky; top:0; z-index:30;
+    }
+    .mobile-menu-btn{
+      all:unset; box-sizing:border-box; display:flex; align-items:center; gap:8px; cursor:pointer;
+      font-family:var(--font-display); font-weight:700; font-size:15px; color:var(--ink);
+      padding:6px 4px;
+    }
+    .mobile-menu-btn svg{ flex:none; }
+
+    .sidebar-backdrop{
+      display:block; position:fixed; inset:0; background:rgba(15,20,45,.45);
+      opacity:0; pointer-events:none; transition:opacity .2s ease; z-index:40;
+    }
+    .sidebar-backdrop.is-open{ opacity:1; pointer-events:auto; }
+
+    .sidebar{
+      position:fixed; top:0; left:0; width:82%; max-width:300px; height:100vh;
+      transform:translateX(-100%); transition:transform .25s ease; z-index:50;
+      box-shadow:0 0 40px rgba(0,0,0,.35);
+    }
+    .sidebar.is-open{ transform:translateX(0); }
   }
 
   /* ---------- Breadcrumb scope bar ---------- */
@@ -618,7 +643,15 @@
 
 <div class="app">
 
-  <aside class="sidebar">
+  <div class="mobile-topbar">
+    <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="เปิดเมนูหน่วยงาน">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg>
+      <span>เมนูหน่วยงาน</span>
+    </button>
+  </div>
+  <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+
+  <aside class="sidebar" id="sidebarPanel">
     <div class="brand">
       <span class="brand-mark">🏭</span>
       <div>
@@ -812,10 +845,18 @@
     return ALL_COLUMNS.filter(function(c){ return ids.indexOf(c.stationId) !== -1; });
   }
 
+  function closeMobileSidebar(){
+    var sb = document.getElementById("sidebarPanel");
+    var bd = document.getElementById("sidebarBackdrop");
+    if(sb) sb.classList.remove("is-open");
+    if(bd) bd.classList.remove("is-open");
+  }
+
   function goAll(){
     state.deptFilter = null; state.stationFilter = null; state.expandedDept = null;
     state.activeColumn = null; state.activeEmployee = null;
     renderAll();
+    closeMobileSidebar();
   }
   function goDept(deptId){
     if(state.deptFilter === deptId && !state.stationFilter){
@@ -830,6 +871,7 @@
     state.deptFilter = deptId; state.stationFilter = stationId; state.expandedDept = deptId;
     state.activeColumn = null; state.activeEmployee = null;
     renderAll();
+    closeMobileSidebar();
   }
 
   // ---------- Stats ----------
@@ -1244,6 +1286,11 @@
   }
 
   // ---------- Controls ----------
+  document.getElementById("mobileMenuBtn").addEventListener("click", function(){
+    document.getElementById("sidebarPanel").classList.add("is-open");
+    document.getElementById("sidebarBackdrop").classList.add("is-open");
+  });
+  document.getElementById("sidebarBackdrop").addEventListener("click", closeMobileSidebar);
   document.getElementById("navAll").addEventListener("click", goAll);
   document.getElementById("searchInput").addEventListener("input", function(e){
     state.query = e.target.value;
